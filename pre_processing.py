@@ -4,13 +4,13 @@ from obspy import read
 import concurrent.futures
 import numpy as np
 
-VARIANCE = False
+VARIANCE = True
 MEAN_VARIANCE = False
 DM_CHOOSE = False
 KNN = False
 dir_path = os.path.join(os.getcwd(), "data")
 files = os.listdir(dir_path)
-n = 2
+n = 3
 
 
 def variance_choose(waveforms, n):
@@ -111,7 +111,7 @@ def choosing(file):
         fd.close()
         return
     index = int(re.findall('[0-9]+', file)[0])
-    file_d = open(f"knn_pick_data_{index}.txt", 'w+')
+    file_d = open(f"variance_pick_data_{index}.txt", 'w+')
     for item in indices:
         file_d.write('%s\n' % lines[item])
     file_d.close()
