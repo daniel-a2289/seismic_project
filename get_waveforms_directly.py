@@ -1,18 +1,9 @@
 
 import os
-import obspy
 from obspy.core.event import read_events
 from obspy.clients.fdsn.mass_downloader import CircularDomain, Restrictions, MassDownloader
-from obspy.clients.fdsn.mass_downloader.domain import RectangularDomain
-
 from multiprocessing import Pool, cpu_count
 from tqdm import tqdm
-
-j = 0
-
-# do all the next stages for every single event in events array
-
-# for i, event in enumerate(events[5375:]):
 
 
 def download(i, event):
@@ -60,7 +51,7 @@ def download(i, event):
     mdl = MassDownloader(providers=["IRIS"])
     # The data will be downloaded to the ``./waveforms/`` and ``./stations/``
     # folders with automatically chosen file names.
-    mdl.download(domain, restrictions, mseed_storage=f"waveforms_{i+j}", stationxml_storage=f"stations_{i+j}")
+    mdl.download(domain, restrictions, mseed_storage=f"waveforms_{i}", stationxml_storage=f"stations_{i}")
 
 
 if __name__ == "__main__":
@@ -70,7 +61,6 @@ if __name__ == "__main__":
     print("finished reading events")
 
     with Pool(cpu_count()) as pool:
-        values = [(i, event) for i, event in enumerate(events[j:])]
-        # print(values)
+        values = [(i, event) for i, event in enumerate(events)]
         values = tqdm(values, total=len(values))
         pool.starmap(download, values)
